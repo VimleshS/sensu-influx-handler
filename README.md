@@ -13,7 +13,7 @@ from Sensu.
 
 ## Installation
 
-You can use the pre-built binaries, or follow the instructions in the [Compilation](#compilation) section to 
+You can use the [pre-built binaries](https://github.com/launchdarkly/sensu-influx-handler/releases), or follow the instructions in the [Compilation](#compilation) section to 
 build yourself.
 
 This process should be managed by something like [supervisord](http://supervisord.org).
