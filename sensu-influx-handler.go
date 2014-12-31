@@ -19,15 +19,15 @@ const (
 )
 
 type Client struct {
-	name    string `json:"name"`
-	address string `json:"address"`
+	Name    string `json:"name"`
+	Address string `json:"address"`
 }
 type Check struct {
-	output string `json:"output"`
+	Output string `json:"output"`
 }
 type Event struct {
-	client Client `json:"client"`
-	check  Check  `json:"client"`
+	Client Client `json:"client"`
+	Check  Check  `json:"check"`
 }
 
 type Config struct {
@@ -105,7 +105,7 @@ func handleRequest(conn net.Conn, c *client.Client) {
 		return
 	}
 
-	outputlines := strings.Split(strings.TrimSpace(evt.check.output), "\n")
+	outputlines := strings.Split(strings.TrimSpace(evt.Check.Output), "\n")
 
 	seriesdata := make(map[string][][]interface{})
 
@@ -124,18 +124,20 @@ func handleRequest(conn net.Conn, c *client.Client) {
 
 		val, verr := strconv.ParseFloat(pieces[1], 64)
 		if verr != nil {
+			fmt.Printf("Error parsing value (%s): %s\n", pieces[1], verr.Error())
 			continue
 		}
 
 		time, terr := strconv.ParseInt(pieces[2], 10, 64)
 		if terr != nil {
+			fmt.Printf("Error parsing time (%s): %s\n", pieces[2], terr.Error())
 			continue
 		}
 
-		seriesdata[key] = append(seriesdata[key], []interface{}{time, evt.client.name, evt.client.address, val})
+		seriesdata[key] = append(seriesdata[key], []interface{}{time, evt.Client.Name, evt.Client.Address, val})
 	}
 
-	serieses := make([]*client.Series, len(seriesdata))
+	serieses := make([]*client.Series, 0)
 	for key, points := range seriesdata {
 		series := &client.Series{
 			Name:    key,
@@ -145,8 +147,8 @@ func handleRequest(conn net.Conn, c *client.Client) {
 		serieses = append(serieses, series)
 	}
 
-	if err := c.WriteSeries(serieses); err != nil {
-		fmt.Println("Error sending data to influx:", err.Error())
+	if err := c.WriteSeriesWithTimePrecision(serieses, client.Second); err != nil {
+		fmt.Printf("Error sending data to influx: %s, data: %+v\n", err.Error(), serieses)
 	}
 
 }
