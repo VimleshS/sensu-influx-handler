@@ -5,7 +5,7 @@ A listener to take sensu metrics events on a TCP socket, and post them to Influx
 ## Motivation
 
 If you want to use Sensu as your monitoring router, you still need to send the metrics somewhere.  
-InfluxDB is a good choice for this, but if you have a large numebr of metrics, forking a handler 
+InfluxDB is a good choice for this, but if you have a large number of metrics, forking a handler 
 (using the `pipe` type) will be non-performant.
 
 This small application is meant to run as a daemon, listening on a TCP port, for metrics events
