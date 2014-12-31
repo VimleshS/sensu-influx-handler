@@ -13,10 +13,10 @@ from Sensu.
 
 ## Installation
 
-You can use the pre-built binaries, or follow the instructions in the [Compilation]() section to 
+You can use the pre-built binaries, or follow the instructions in the [Compilation](#compilation) section to 
 build yourself.
 
-This process should be managed by something like [supervisord](http://supervisord.org)
+This process should be managed by something like [supervisord](http://supervisord.org).
 
 Be sure to create an appropriate config file for your environment.  The environment is specifed using the `SENSU_INFLUX_MODE` environment variable.  For instance:
 
